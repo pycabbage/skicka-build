@@ -2,6 +2,10 @@ on:
   push:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build
@@ -13,11 +17,7 @@ jobs:
           - goos: "aix"
             goarch: "ppc64"
           - goos: "android"
-            goarch: "386"
-          - goos: "android"
             goarch: "amd64"
-          - goos: "android"
-            goarch: "arm"
           - goos: "android"
             goarch: "arm64"
           - goos: "darwin"
@@ -36,10 +36,6 @@ jobs:
             goarch: "arm64"
           - goos: "illumos"
             goarch: "amd64"
-          - goos: "ios"
-            goarch: "amd64"
-          - goos: "ios"
-            goarch: "arm64"
           - goos: "js"
             goarch: "wasm"
           - goos: "linux"
@@ -50,8 +46,6 @@ jobs:
             goarch: "arm"
           - goos: "linux"
             goarch: "arm64"
-          - goos: "linux"
-            goarch: "loong64"
           - goos: "linux"
             goarch: "mips"
           - goos: "linux"
@@ -102,20 +96,23 @@ jobs:
             goarch: "arm"
           - goos: "windows"
             goarch: "arm64"
+    env:
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
     steps:
       - uses: actions/checkout@v3
         with:
           repository: google/skicka
       - uses: actions/setup-go@v3
+      - name: Go Version
+        run: |
+          go version
+          go tool dist list
       - name: Go Mod Init
         run: |
           go mod init github.com/google/skicka
           go mod tidy
-          go tool dist list
       - name: Build
-        env:
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
         run: |
           mkdir build
           go build -o build/skicka-${{ matrix.goos }}-${{ matrix.goarch }}
