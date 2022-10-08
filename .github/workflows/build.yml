@@ -1,0 +1,20 @@
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GOOS: linux
+      GOARCH: amd64
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: google/skicka
+      - uses: actions/setup-go@v3
+      - name: Go Mod Init
+        run: go mod init github.com/google/skicka
+      - run: |
+          mkdir build
+          go build -o build/skicka-${{ env.GOOS }}-${{ env.GOARCH }}
