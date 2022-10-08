@@ -14,8 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - goos: "aix"
-            goarch: "ppc64"
           - goos: "android"
             goarch: "amd64"
           - goos: "android"
@@ -99,6 +97,7 @@ jobs:
     env:
       GOOS: ${{ matrix.goos }}
       GOARCH: ${{ matrix.goarch }}
+      FILENAME: skicka-${{ matrix.goos }}-${{ matrix.goarch }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -115,8 +114,17 @@ jobs:
       - name: Build
         run: |
           mkdir build
-          go build -o build/skicka-${{ matrix.goos }}-${{ matrix.goarch }}
+          go build -o build/${{ env.FILENAME }}
       - uses: actions/upload-artifact@v2
         with:
-          name: skicka-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: build/skicka-${{ matrix.goos }}-${{ matrix.goarch }}
+          name: ${{ env.FILENAME }}
+          path: build/${{ env.FILENAME }}
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          path: build
+      - run: ls build
