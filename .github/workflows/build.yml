@@ -4,6 +4,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     env:
       GOOS: linux
@@ -17,6 +18,11 @@ jobs:
         run: |
           go mod init github.com/google/skicka
           go mod tidy
-      - run: |
+      - name: Build
+        run: |
           mkdir build
           go build -o build/skicka-${{ env.GOOS }}-${{ env.GOARCH }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: skicka-${{ env.GOOS }}-${{ env.GOARCH }}
+          path: build/skicka-${{ env.GOOS }}-${{ env.GOARCH }}
