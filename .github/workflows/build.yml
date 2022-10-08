@@ -14,7 +14,9 @@ jobs:
           repository: google/skicka
       - uses: actions/setup-go@v3
       - name: Go Mod Init
-        run: go mod init github.com/google/skicka
+        run: |
+          go mod init github.com/google/skicka
+          go mod tidy
       - run: |
           mkdir build
           go build -o build/skicka-${{ env.GOOS }}-${{ env.GOARCH }}
