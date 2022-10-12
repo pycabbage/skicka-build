@@ -3,6 +3,18 @@
 [![.github/workflows/build.yml](https://github.com/pycabbage/skicka-build/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/pycabbage/skicka-build/actions/workflows/build.yml)
 
 This is a build of [skicka](https://github.com/google/skicka)
+
+## Usage
+
+```bash
+# Change URL to match your environment
+curl https://nightly.link/pycabbage/skicka-build/workflows/build/master/skicka-linux-amd64.zip -kLo /tmp/skicka.zip
+unzip /tmp/skicka.zip
+sudo mv skicka-linux-amd64 /usr/local/bin/skicka
+sudo chmod +x /usr/local/bin/skicka
+skicka -no-browser-auth ls
+```
+
 ## Build links
 
 | OS | Arch | Link |
