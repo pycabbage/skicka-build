@@ -12,6 +12,8 @@ curl https://nightly.link/pycabbage/skicka-build/workflows/build/master/skicka-l
 unzip /tmp/skicka.zip
 sudo mv skicka-linux-amd64 /usr/local/bin/skicka
 sudo chmod +x /usr/local/bin/skicka
+skicka init
+# Edit ~/.skicka.config and add Google OAuth clientid and clientsecret
 skicka -no-browser-auth ls
 ```
 
